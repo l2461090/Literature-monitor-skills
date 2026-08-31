@@ -1,0 +1,7 @@
+interface:
+  display_name: "Literature-monitor-skills"
+  short_description: "按读者首次可见时间监控指定期刊的新论文"
+  default_prompt: "Use $literature-monitor-skills to set up my monitor. Ask only for any missing items among: research direction, exact target journals, schedule, and article-content requirements."
+
+policy:
+  allow_implicit_invocation: true
