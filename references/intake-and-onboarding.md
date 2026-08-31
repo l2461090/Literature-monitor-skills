@@ -60,9 +60,8 @@ Resolve journal aliases and official reader-visible surfaces during setup. A sup
 
 ## Default report language
 
-- Report title, section headings, field labels, coverage explanations, failure notes, and conclusions: use the user's conversation language.
-- Exact article title: preserve the publisher's source title.
-- Journal name: preserve the canonical source name.
-- Abstract summary: English when an English abstract is available, unless the user explicitly requests another language.
+- Report title, section headings, field labels, coverage explanations, failure/source notes, and conclusions: use the user's conversation language. For Chinese-language users, use Chinese for all of these surrounding elements.
+- Exact article title and journal name: preserve the publisher's original wording (normally English for the target journals); do not translate them into Chinese.
+- Abstract and article summary: keep in English when the source abstract is English, unless the user explicitly requests another language.
 - Publisher surface labels such as `ASAP Articles`, `Early View`, and `First Release`: preserve the publisher wording.
 - If no abstract exists, report exactly `No abstract supplied by the journal`.

@@ -65,6 +65,7 @@ Use a short filesystem-safe `monitor-id`. Do not put API keys or institutional c
     "interface_language": "user-conversation-language",
     "preserve_source_article_titles": true,
     "preserve_canonical_journal_names": true,
+    "article_summary_language": "en-when-source-is-english",
     "requested_fields": ["title", "journal", "publisher-status", "first-seen-at", "published-online", "doi-or-stable-identifier", "english-abstract", "visibility-source", "abstract-source"],
     "english_abstract_mode": "original-when-permitted-otherwise-faithful-summary-plus-source",
     "include_relevance_note": false,
@@ -77,7 +78,7 @@ Journal names are an exact whitelist. `aliases` cover metadata variants; `issn` 
 
 `topic.statement` records the research direction. Optional `include_concepts`, `exclude_concepts`, and `notes` refine that direction's semantic scope; they are not a requirement that every literal term appear. Preserve user-specified scope boundaries. For legacy configurations, continue to interpret those fields as topic scope.
 
-`output.requested_fields` records the user's report-content requirements. Use `additional_fields` for requested fields such as `conclusion`, `methods`, `authors`, or `corresponding-author`; source every added field. `output.interface_language` controls report headings, labels, and explanations. Exact article titles and canonical journal names remain in the source language. For `english-abstract`, use the original when permitted; otherwise use a faithful English summary and link its source.
+`output.requested_fields` records the user's report-content requirements. Use `additional_fields` for requested fields such as `conclusion`, `methods`, `authors`, or `corresponding-author`; source every added field. `output.interface_language` controls report titles, section headings, labels, explanations, coverage notes, source notes, and conclusions. For a Chinese interface, all of those elements are Chinese. Exact article titles and canonical journal names remain in their original publisher language, while `article_summary_language` keeps article summaries in English when the source material is English. For `english-abstract`, use the original when permitted; otherwise use a faithful English summary and link its source.
 
 ## `state.json`
 

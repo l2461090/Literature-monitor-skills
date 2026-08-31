@@ -60,7 +60,7 @@ Start every report with:
 - per-journal official online surface, previous/current scan time, and any failures;
 - number of newly observed, verified, relevant papers.
 
-Use the user's conversation language for report headings, field labels, coverage explanations, audit notes, and conclusions. Preserve exact article titles and canonical journal names in their source language. By default, include title, journal, publisher status, first observation time, online date when available, DOI/stable identifier, English abstract, and source links. Add or omit article-level fields according to the user's report-content requirements. The example below uses Chinese surrounding labels; localize them for users speaking another language. For each verified paper, output:
+Use the user's conversation language for report headings, section headings, field labels, coverage explanations, audit notes, source notes, and conclusions. For a Chinese-language report, write all of those surrounding elements in Chinese. Keep article titles and canonical journal names in the publisher's original language (normally English for the target journals), and keep requested English abstracts and article summaries in English. Preserve publisher-surface labels such as `ASAP Articles` or `Early View` exactly as shown by the publisher. By default, include title, journal, publisher status, first observation time, online date when available, DOI/stable identifier, English abstract, and source links. Add or omit article-level fields according to the user's report-content requirements. The example below uses Chinese surrounding labels; localize them for users speaking another language. For each verified paper, output:
 
 ```markdown
 ### N. Exact article title
