@@ -20,9 +20,9 @@ Use a short filesystem-safe `monitor-id`. Do not put API keys or institutional c
   "monitor_id": "example-topic",
   "topic": {
     "statement": "The research direction in one or two precise sentences",
-    "include_concepts": ["required or preferred system", "mechanism", "method", "outcome"],
-    "exclude_concepts": ["explicitly out-of-scope content"],
-    "notes": "Article-content requirements supplied by the user, including material, population, application, or other semantic boundaries"
+    "include_concepts": ["optional scope concept supplied as part of the research direction"],
+    "exclude_concepts": ["optional out-of-scope concept supplied as part of the research direction"],
+    "notes": "Optional semantic boundaries that belong to the research direction"
   },
   "content_types": {
     "include": ["research-article", "review-article"],
@@ -65,18 +65,19 @@ Use a short filesystem-safe `monitor-id`. Do not put API keys or institutional c
     "interface_language": "user-conversation-language",
     "preserve_source_article_titles": true,
     "preserve_canonical_journal_names": true,
-    "abstract_summary_language": "en",
-    "abstract_mode": "faithful-summary-plus-source-link",
-    "include_relevance_note": false
+    "requested_fields": ["title", "journal", "publisher-status", "first-seen-at", "published-online", "doi-or-stable-identifier", "english-abstract", "visibility-source", "abstract-source"],
+    "english_abstract_mode": "original-when-permitted-otherwise-faithful-summary-plus-source",
+    "include_relevance_note": false,
+    "additional_fields": []
   }
 }
 ```
 
 Journal names are an exact whitelist. `aliases` cover metadata variants; `issn` is preferred when known. `reader_visibility_surface` must point to the official public release surface actually used by that journal. A journal-family request is not an exact whitelist until its member journals are enumerated. `full_text_access_required: false` means subscription-only articles still qualify when their official landing pages are publicly visible; turn it on only when the user explicitly requests freely readable full text.
 
-`topic.statement` records the research direction. `include_concepts`, `exclude_concepts`, and `notes` encode the user's article-content requirements. They control semantic abstract screening and are not a requirement that every literal term appear. Preserve user-specified exclusions.
+`topic.statement` records the research direction. Optional `include_concepts`, `exclude_concepts`, and `notes` refine that direction's semantic scope; they are not a requirement that every literal term appear. Preserve user-specified scope boundaries. For legacy configurations, continue to interpret those fields as topic scope.
 
-`output.interface_language` controls report headings, labels, and explanations. Exact article titles and canonical journal names remain in the source language; English abstract summaries remain English unless the user explicitly requests another language.
+`output.requested_fields` records the user's report-content requirements. Use `additional_fields` for requested fields such as `conclusion`, `methods`, `authors`, or `corresponding-author`; source every added field. `output.interface_language` controls report headings, labels, and explanations. Exact article titles and canonical journal names remain in the source language. For `english-abstract`, use the original when permitted; otherwise use a faithful English summary and link its source.
 
 ## `state.json`
 

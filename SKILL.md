@@ -11,7 +11,7 @@ In this skill, **reader-visible** means that an ordinary reader can publicly dis
 
 ## Select the mode
 
-- **Set up** when the user provides or changes a direction, journals, schedule, or article-content requirements. Read [references/intake-and-onboarding.md](references/intake-and-onboarding.md) and [references/config-and-state.md](references/config-and-state.md), create or update the monitor bundle, then run an initial retrieval unless the user asks not to.
+- **Set up** when the user provides or changes a direction, journals, schedule, or report-content requirements. Read [references/intake-and-onboarding.md](references/intake-and-onboarding.md) and [references/config-and-state.md](references/config-and-state.md), create or update the monitor bundle, then run an initial retrieval unless the user asks not to.
 - **Run now** when the user asks for this week's papers or supplies a case to test. Read [references/retrieval-protocol.md](references/retrieval-protocol.md) and execute one cycle. A persistent config is helpful but not required for a one-off test.
 - **Scheduled run** when an existing automation invokes the skill. Read [references/config-and-state.md](references/config-and-state.md) and [references/retrieval-protocol.md](references/retrieval-protocol.md), use the named config and state paths, and do not ask routine questions unless execution cannot continue safely.
 
@@ -22,9 +22,9 @@ Normal recurring setup requires exactly four user decisions:
 1. **Research direction** — the topic, question, or field to monitor;
 2. **Target journals** — an explicit journal whitelist;
 3. **Schedule** — frequency, day, time, and timezone;
-4. **Article-content requirements** — the systems, materials, populations, mechanisms, methods, outcomes, applications, or other substantive content that makes a paper relevant, plus exclusions when needed.
+4. **Report-content requirements** — the information to provide for each article, such as title, DOI, English abstract, conclusion, methods, authors, publication date, or links.
 
-Accept the four decisions in one natural-language message or guide the user through only the missing items. Do not ask again for information already supplied. Article-content requirements control semantic screening; they are not merely report-column preferences. Unless the user changes the defaults, include research articles and reviews and exclude editorials, news, corrections, obituaries, letters to the editor, and book reviews.
+Accept the four decisions in one natural-language message or guide the user through only the missing items. Do not ask again for information already supplied. The research direction controls semantic screening; any useful inclusion or exclusion boundaries belong in that direction's scope. Report-content requirements control what the digest displays, not which papers qualify. Unless the user changes the defaults, include research articles and reviews and exclude editorials, news, corrections, obituaries, letters to the editor, and book reviews.
 
 If timezone is omitted, use the user's current timezone. If a weekly schedule omits day or time, assume Monday 09:00, state the assumption, and make it easy to change. Do not silently expand a title such as `Nature` into the full Nature Portfolio. Resolve ambiguous titles, aliases, print/online ISSNs, and the journal's official reader-visible release surface before claiming coverage. Use [references/publisher-surface-taxonomy.md](references/publisher-surface-taxonomy.md) for routing; visible publisher wording controls over the examples.
 
@@ -44,9 +44,9 @@ If timezone is omitted, use the user's current timezone. If a weekly schedule om
 2. Open each configured `reader_visibility_surface.url` (accept legacy `online_surface`) and enumerate every currently visible in-scope scholarly article, following pagination/load-more controls. Capture the surface label, source URL, scan time, title, article URL, DOI or other persistent identifier when present, and displayed online-availability date/status.
 3. Follow [references/retrieval-protocol.md](references/retrieval-protocol.md). Treat journals independently so a blocked publisher does not become a false zero for that journal.
 4. Require exact journal identity using the official surface, canonical title, aliases, or ISSN. Exclude accepted manuscripts that have no public official landing page and exclude content types outside the saved configuration. A publicly visible accepted manuscript or version-of-record page may qualify when the journal itself presents it in the configured release surface.
-5. Fetch an official or structured abstract for every plausible topical candidate and screen semantically. Do not rely on title keywords alone.
+5. Fetch an official or structured abstract for every plausible topical candidate when needed to screen the research direction, and collect each requested report field. Do not rely on title keywords alone.
 6. Deduplicate against `state.json` by normalized DOI, then by another persistent publisher identifier, then by normalized title plus first author plus journal. Absence of a DOI is not a reason to discard a legitimate humanities or social-science article when its official identity and visibility are verified.
-7. Verify each main-list identifier and ground the requested abstract/summary in the publisher abstract or a structured scholarly source. Record both the visibility-source URL and abstract-source URL. Some humanities journals provide no abstract; in that case report `No abstract supplied by the journal` and, only if requested, provide a clearly labeled synopsis grounded in accessible article text—not an invented abstract.
+7. Verify each main-list identifier and ground every requested abstract, conclusion, or other content field in an official or structured scholarly source. Record both the visibility-source URL and the source URL for the requested content. Some humanities journals provide no abstract; in that case report `No abstract supplied by the journal` when an abstract was requested and, only if requested, provide a clearly labeled synopsis grounded in accessible article text—not an invented abstract. If a requested conclusion is unavailable from accessible authoritative text, say so rather than infer it.
 8. Write the digest. Only after the digest succeeds, add verified reported records to `seen` with `first_seen_at`, and update `journal_scans.<journal>` only for journals whose official online surface was successfully inspected. A partial run must preserve failed journals' previous scan state.
 
 The bundled stdlib-only [scripts/crossref_recent.py](scripts/crossref_recent.py) is a secondary metadata and DOI-verification helper. It is not sufficient to claim ASAP/Early View completeness or reader visibility.
@@ -60,7 +60,7 @@ Start every report with:
 - per-journal official online surface, previous/current scan time, and any failures;
 - number of newly observed, verified, relevant papers.
 
-Use the user's conversation language for report headings, field labels, coverage explanations, audit notes, and conclusions. Preserve exact article titles and canonical journal names in their source language. By default, write the abstract summary in English when an English abstract is available. The example below uses Chinese surrounding labels; localize them for users speaking another language. For each verified paper, output:
+Use the user's conversation language for report headings, field labels, coverage explanations, audit notes, and conclusions. Preserve exact article titles and canonical journal names in their source language. By default, include title, journal, publisher status, first observation time, online date when available, DOI/stable identifier, English abstract, and source links. Add or omit article-level fields according to the user's report-content requirements. The example below uses Chinese surrounding labels; localize them for users speaking another language. For each verified paper, output:
 
 ```markdown
 ### N. Exact article title
@@ -69,7 +69,7 @@ Use the user's conversation language for report headings, field labels, coverage
 - 首次观察时间：ISO-8601 timestamp
 - 官网首次在线日期：YYYY-MM-DD（only when the publisher displays or verifies it）
 - DOI: https://doi.org/10.xxxx/xxxxx
-- 英文摘要概述：Faithful English summary grounded only in the verified abstract
+- 英文摘要：Original English abstract when permitted; otherwise a faithful English summary grounded only in the verified abstract, with its source link
 - 可见性来源：Official publisher URL
 - 摘要来源：Publisher/PubMed/Europe PMC/OpenAlex URL
 ```
