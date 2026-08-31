@@ -9,6 +9,7 @@ Read this file when setting up or materially changing a monitor.
 | Research direction | A topic, research question, or one-to-two-sentence scope statement; include any desired scope boundaries here | Creates the semantic topic rule and retrieval concepts |
 | Target journals | Exact journal titles or unambiguous aliases | Creates the fixed journal whitelist and publisher-surface routes |
 | Schedule | Frequency, day, local time, and timezone | Creates or updates the recurring task |
+| Strict time window | `last N calendar days` or an explicit inclusive date range, plus timezone | Strictly limits eligibility by the official publisher-displayed online date |
 | Report-content requirements | The fields to show for each article, such as title, DOI, English abstract, conclusion, methods, authors, dates, or links | Controls the article-level fields in the digest |
 
 The research direction determines whether a paper is relevant. Its scope may include helpful boundaries such as a system, method, application, inclusion, or exclusion. The fourth decision is solely about what the digest should provide for each qualifying article; save it under `output` rather than `topic`.
@@ -21,6 +22,7 @@ When none of the four decisions is known, ask the user to complete this compact 
 研究方向：
 目标期刊：
 定时任务：
+严格检索时间范围：
 输出内容要求：
 ```
 
@@ -30,6 +32,7 @@ Equivalent English template:
 Research direction:
 Target journals:
 Schedule:
+Strict time window:
 Report content requirements:
 ```
 
@@ -39,6 +42,8 @@ Natural-language answers are valid. Do not force the template when the user has 
 
 - Exact journal titles form a whitelist. A publisher family or phrase such as `Nature journals` must be enumerated before coverage can be claimed.
 - When a weekly schedule lacks a day or time, assume Monday at 09:00 in the user's current timezone and explicitly show the assumption.
+- A strict time window is mandatory. Accept either `最近 7 个自然日` / `last 7 calendar days`, or an explicit range such as `2026-08-25 至 2026-08-31`. Do not silently assume a duration. Rolling windows include the local scan date and the preceding `N - 1` local calendar dates; explicit ranges include both endpoints.
+- Require an official publisher-displayed online date for strict time eligibility. A missing, month-only, year-only, or metadata-only date is not eligible for the main list; list it separately as date-unverified when relevant.
 - Default content types are research articles and review articles. Exclude editorials, news, corrections, obituaries, letters to the editor, and book reviews unless requested.
 - Default relevance mode is direct semantic relevance. Put plausible but non-central papers in an adjacent/borderline section rather than silently mixing them into the direct list.
 - A research direction may be broad (`all work on supramolecular chemistry`) or constrained (`only host–guest recognition involving macrocycles; exclude biomedical delivery`). Preserve both inclusions and exclusions as topic scope.
@@ -53,6 +58,7 @@ Before or while saving setup, present the four decisions in a compact summary so
 - 研究方向：...
 - 目标期刊：...
 - 定时任务：...
+- 严格检索时间范围：...
 - 输出内容要求：...
 ```
 

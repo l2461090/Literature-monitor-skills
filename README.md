@@ -21,6 +21,7 @@
 - 在指定期刊的官方读者可见栏目或文章页中扫描新上线论文，并遍历栏目分页。
 - 根据 DOI、稳定出版商文章标识或官方 URL 建立首次观察记录，避免同一篇文章在 Early View 与正式卷期之间重复出现。
 - 仅纳入与研究方向相关的文章；任何纳入/排除边界都属于研究方向本身。
+- 提供严格检索时间范围：可选“最近 N 个自然日”或明确起止日期；只有出版社官网显示的首次在线日期落在该范围内的文章才会进入主结果。
 - 根据你的输出内容要求，生成论文标题、期刊、出版社栏目状态、首次观察时间、官网首次在线日期（若有）、DOI/稳定标识、英文摘要、结论或其他指定字段。
 - 官方栏目无法完整访问时，明确标记为 `partial coverage`；不会把扫描失败误报为“没有新论文”。
 
@@ -34,13 +35,15 @@
 研究方向：
 目标期刊：
 定时任务：
+严格检索时间范围：
 输出内容要求：
 ```
 
 1. **研究方向**：需要持续跟踪的领域、问题或主题。
 2. **目标期刊**：准确的期刊白名单；不会自动把 `Nature` 扩展为整个 Nature Portfolio。
 3. **定时任务**：频率、星期、时间和时区，例如“每周一 09:00，Asia/Shanghai”。
-4. **输出内容要求**：每篇文章需要给出的信息，例如标题、DOI、英文摘要、结论、方法、作者、日期或链接。
+4. **严格检索时间范围**：`最近 N 个自然日`或明确起止日期，必须填写。例如“最近 7 个自然日”或“2026-08-25 至 2026-08-31”；两端日期均包含在内。
+5. **输出内容要求**：每篇文章需要给出的信息，例如标题、DOI、英文摘要、结论、方法、作者、日期或链接。
 
 示例：
 
@@ -48,6 +51,7 @@
 研究方向：Supramolecular chemistry
 目标期刊：Nature, Science, Nature Chemistry, Nature Materials, Nature Communications, Chem, Journal of the American Chemical Society, Angewandte Chemie International Edition, Advanced Materials
 定时任务：每周一 09:00，Asia/Shanghai
+严格检索时间范围：最近 7 个自然日
 输出内容要求：标题、DOI、英文原摘要（若复用条件不允许则给忠实英文摘要概述并附原文链接）、官网首次在线日期和可见性来源。
 ```
 
@@ -72,7 +76,7 @@ git clone https://github.com/l2461090/Literature-monitor-skills.git
 
 Literature-monitor-skills is built for labs and individual researchers who need a reliable weekly view of newly reader-visible papers in a defined field and a defined set of journals. It scans publisher-controlled surfaces such as ASAP Articles and Early View, records the first time a stable article identity is observed, and delivers a deduplicated digest with the original English abstract when the journal supplies one.
 
-To start, provide: **research direction**, **exact target journals**, **schedule (with time zone)**, and **report-content requirements**. The research direction determines relevance; report-content requirements specify which fields to deliver. The monitor treats publisher visibility as the evidence for a new paper; metadata indexes are used only to supplement identifiers and abstracts.
+To start, provide: **research direction**, **exact target journals**, **schedule (with time zone)**, a **strict time window**, and **report-content requirements**. A strict window is either the last N calendar days or an inclusive date range; a paper must have an official publisher-displayed online date inside it. The research direction determines relevance; report-content requirements specify which fields to deliver. The monitor treats publisher visibility as the evidence for a new paper; metadata indexes cannot replace the official date or visibility evidence.
 
 ## License
 

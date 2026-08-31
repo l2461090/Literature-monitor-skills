@@ -41,20 +41,18 @@ Accept a record only when at least one condition holds:
 
 Do not use fuzzy matching to turn similarly named journals into whitelist matches. Record unresolved variants and request an alias update.
 
-## Reader visibility and publication date
+## Reader visibility and strict time window
 
 The main-list eligibility proof is a current official journal/publisher article listing or article page reachable from the configured reader-visibility surface. Store that URL as `visibility_source_url` and the run timestamp as `first_seen_at`. Public visibility of the landing page is sufficient unless the user separately requires open/full-text access.
 
-An article's online publication date is descriptive and does not control weekly inclusion. A newly observed ASAP article may carry an earlier formal date because publisher cadence and metadata deposits differ.
+Reader visibility and date eligibility are separate requirements. In strict mode, a candidate must be reader-visible on the official publisher surface *and* have an official publisher-displayed online-availability date within the configured window. For a rolling `N`-day window, use inclusive local calendar dates from the scan date minus `N - 1` through the scan date. For a fixed range, both configured endpoints are inclusive.
 
-Date priority:
+Date evidence priority:
 
-1. publisher `Published online` date;
-2. structured `published-online` date from Crossref;
-3. explicit publication date from PubMed/Europe PMC or the publisher;
-4. print/issue date only when no online date exists, labeled `print publication date`.
+1. publisher `Published online` / online-availability date on the official surface or official article page;
+2. no fallback for strict-date eligibility.
 
-Reject created/indexed/deposited dates as publication evidence. Month-only or year-only dates may be retained as incomplete metadata, but they do not block inclusion when current reader visibility and DOI are verified.
+Crossref, PubMed/Europe PMC, OpenAlex, or search-engine dates may be recorded for reconciliation only. Reject created/indexed/deposited dates, print/issue dates, and metadata-only online dates as strict-date evidence. Month-only or year-only official dates are incomplete: retain them as metadata but list the item as date-unverified rather than including it in the main list.
 
 ## Identifier and deduplication
 

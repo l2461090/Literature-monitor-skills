@@ -52,6 +52,15 @@ Use a short filesystem-safe `monitor-id`. Do not put API keys or institutional c
     "local_time": "09:00",
     "timezone": "Asia/Shanghai"
   },
+  "time_window": {
+    "mode": "rolling-calendar-days",
+    "days": 7,
+    "timezone": "Asia/Shanghai",
+    "boundary": "inclusive-local-dates",
+    "date_evidence": "official-publisher-displayed-online-date-only",
+    "strict": true,
+    "missing_or_incomplete_official_date": "exclude-main-list-and-report-date-unverified"
+  },
   "retrieval": {
     "mode": "reader-visible-first-seen",
     "require_current_reader_visibility": true,
@@ -75,6 +84,8 @@ Use a short filesystem-safe `monitor-id`. Do not put API keys or institutional c
 ```
 
 Journal names are an exact whitelist. `aliases` cover metadata variants; `issn` is preferred when known. `reader_visibility_surface` must point to the official public release surface actually used by that journal. A journal-family request is not an exact whitelist until its member journals are enumerated. `full_text_access_required: false` means subscription-only articles still qualify when their official landing pages are publicly visible; turn it on only when the user explicitly requests freely readable full text.
+
+`time_window` is required for strict monitoring. For a rolling window, use `mode: "rolling-calendar-days"` and a positive integer `days`; its inclusive dates are the local scan date minus `days - 1` through the local scan date. For a fixed historical query, use `mode: "fixed-date-range"`, replace `days` with `start_date` and `end_date` in `YYYY-MM-DD`, and keep `boundary: "inclusive-local-dates"`. The official publisher-displayed online date must fall within the resulting dates. Do not fill a missing official date with Crossref, PubMed, OpenAlex, or search-engine metadata; report it as date-unverified instead.
 
 `topic.statement` records the research direction. Optional `include_concepts`, `exclude_concepts`, and `notes` refine that direction's semantic scope; they are not a requirement that every literal term appear. Preserve user-specified scope boundaries. For legacy configurations, continue to interpret those fields as topic scope.
 
