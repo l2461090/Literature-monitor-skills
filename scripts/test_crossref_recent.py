@@ -21,6 +21,13 @@ class CrossrefRecentTests(unittest.TestCase):
         item = {"published": {"date-parts": [[2026, 8]]}}
         self.assertEqual(cr.date_from_crossref(item), (None, "published", "month"))
 
+    def test_journal_matching_normalizes_unicode_and_rejects_empty_titles(self):
+        journal = {"name": "Café & Society"}
+        self.assertTrue(
+            cr.journal_matches({"container-title": ["CAFE\u0301 ＆ SOCIETY"]}, journal)
+        )
+        self.assertFalse(cr.journal_matches({"container-title": [""]}, journal))
+
     def test_exact_journal_alias_or_issn(self):
         journal = {"name": "Nature Medicine", "aliases": ["Nat Med"], "issn": ["1078-8956"]}
         self.assertTrue(cr.journal_matches({"container-title": ["Nat Med"]}, journal))
